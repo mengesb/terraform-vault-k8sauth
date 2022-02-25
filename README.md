@@ -1,2 +1,2 @@
-# terraform-vault-k8sauth
-Terraform module for configuring a Kubernetes authentication backend in Vault
+<!--- BEGIN_TF_DOCS --->
+<!--- END_TF_DOCS --->
