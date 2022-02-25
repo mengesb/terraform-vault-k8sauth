@@ -114,7 +114,7 @@ variable "cluster_ca" {
   description = "Base64 encoded CA cert for the given Kubernetes cluster"
 
   validation {
-    condition     = can(regex("^[a-zA-Z0-9+/=]+$", var.cluster_endpoint))
+    condition     = can(regex("^[a-zA-Z0-9+/=]+$", var.cluster_ca))
     error_message = "Cluster CA must be a base64 encoded string."
   }
 }
