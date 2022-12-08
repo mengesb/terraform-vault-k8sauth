@@ -25,6 +25,9 @@ resource "kubernetes_secret_v1" "sa_secret" {
     annotations = {
       "kubernetes.io/service-account.name" = kubernetes_service_account.sa.metadata[0].name
     }
+    
+    namespace = kubernetes_namespace.vault_namespace.metadata[0].name
+    name      = kubernetes_service_account.sa.metadata[0].name
   }
 
   type = "kubernetes.io/service-account-token"
