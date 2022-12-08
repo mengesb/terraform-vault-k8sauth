@@ -20,12 +20,23 @@ resource "kubernetes_service_account" "sa" {
   }
 }
 
-data "kubernetes_secret" "sa_secret" {
+resource "kubernetes_secret_v1" "sa_secret" {
   metadata {
-    namespace = kubernetes_namespace.vault_namespace.metadata[0].name
-    name      = kubernetes_service_account.sa.default_secret_name
+    annotations = {
+      "kubernetes.io/service-account.name" = kubernetes_service_account.sa.metadata[0].name
+    }
   }
+
+  type = "kubernetes.io/service-account-token"
 }
+
+
+# data "kubernetes_secret" "sa_secret" {
+#   metadata {
+#     namespace = kubernetes_namespace.vault_namespace.metadata[0].name
+#     name      = kubernetes_service_account.sa.default_secret_name
+#   }
+# }
 
 resource "kubernetes_cluster_role_binding" "role_bind" {
   metadata {
@@ -54,6 +65,7 @@ resource "vault_kubernetes_auth_backend_config" "configs" {
   backend            = vault_auth_backend.backend.path
   kubernetes_host    = var.cluster_endpoint
   kubernetes_ca_cert = base64decode(var.cluster_ca)
-  token_reviewer_jwt = data.kubernetes_secret.sa_secret.data["token"]
+  token_reviewer_jwt = kubernetes_secret_v1.sa_secret.data["token"]
   issuer             = var.jwt_issuer
+  # token_reviewer_jwt = data.kubernetes_secret.sa_secret.data["token"]
 }
