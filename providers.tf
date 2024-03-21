@@ -8,7 +8,7 @@ terraform {
 
   required_providers {
     vault = {
-      version = "~> 3.3"
+      version = "~> 4.1"
       source  = "hashicorp/vault"
     }
     kubernetes = {
